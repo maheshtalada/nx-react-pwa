@@ -1,0 +1,99 @@
+{
+  "name": "pdp",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/pdp/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/pdp",
+        "index": "apps/pdp/src/index.html",
+        "baseHref": "/",
+        "main": "apps/pdp/src/main.ts",
+        "polyfills": "apps/pdp/src/polyfills.ts",
+        "tsConfig": "apps/pdp/tsconfig.app.json",
+        "assets": ["apps/pdp/src/favicon.ico", "apps/pdp/src/assets"],
+        "styles": ["apps/pdp/src/styles.less"],
+        "scripts": [],
+        "webpackConfig": "apps/pdp/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/pdp/src/environments/environment.ts",
+              "with": "apps/pdp/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "webpackConfig": "apps/pdp/webpack.config.prod.js"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/react:module-federation-dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "pdp:build",
+        "hmr": true,
+        "port": 4203
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "pdp:build:development"
+        },
+        "production": {
+          "buildTarget": "pdp:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/pdp/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/pdp/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "serve-static": {
+      "executor": "@nrwl/web:file-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "pdp:build",
+        "port": 4203
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "pdp:build:development"
+        },
+        "production": {
+          "buildTarget": "pdp:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}
